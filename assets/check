@@ -39,11 +39,11 @@ if [ $DISABLE_VERSION_PATH -eq 0 ]
 then
     if ssh -i ~/.ssh/server_key -p $PORT $USER@$SERVER test -d $BASE_DIR
     then
-        VERSION=`find $BASE_DIR -exec stat {} \; | md5sum | cut -f1 -d" "`
-        echo $VERSION 1>&2
+        VERSION=`ssh -i ~/.ssh/server_key -p $PORT $USER@$SERVER "find $BASE_DIR -exec stat {} \\;" | md5sum | cut -f0 -d" "`
+        echo $VERSION 1>&2                                                                                                   
         REFS="{ \"ref\": \"$VERSION\" }"
-    fi
-else
+    fi                                  
+else  
     for DIR in `ssh -i ~/.ssh/server_key -p $PORT $USER@$SERVER ls -1t $BASE_DIR`; do
       echo $DIR 1>&2
       echo ${#REFS} 1>&2
